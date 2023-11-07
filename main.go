@@ -23,7 +23,6 @@ THE SOFTWARE.
 package main
 
 import (
-	"embed"
 	"flag"
 	"fmt"
 	"os"
@@ -34,9 +33,6 @@ import (
 )
 
 var discordAuthToken, testChannelID, sqlite3DSN string
-
-//go:embed assets/*.ico
-var assets embed.FS
 
 func init() {
 	flag.StringVar(&discordAuthToken, "t", "", "Bot Token")

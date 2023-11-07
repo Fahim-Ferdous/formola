@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"embed"
 	"log"
 	"net/http"
 	"time"
@@ -25,7 +26,31 @@ func enqueue(inp *Message) error {
 	return nil
 }
 
+//go:embed assets/favicon_io/*.ico
+var assets embed.FS
+
+func attachStaticRoutes(r *gin.Engine) {
+	assetsFS := http.FS(assets)
+	r.StaticFileFS("/favicon.ico", "assets/favicon_io/favicon.ico", assetsFS)
+	r.StaticFileFS(
+		"/android-chrome-192x192.png",
+		"assets/favicon_io/android-chrome-192x192.png",
+		assetsFS,
+	)
+	r.StaticFileFS(
+		"/android-chrome-512x512.png",
+		"assets/favicon_io/android-chrome-512x512.png",
+		assetsFS,
+	)
+	r.StaticFileFS("/apple-touch-icon.png", "assets/favicon_io/apple-touch-icon.png", assetsFS)
+	r.StaticFileFS("/favicon-16x16.png", "assets/favicon_io/favicon-16x16.png", assetsFS)
+	r.StaticFileFS("/favicon-32x32.png", "assets/favicon_io/favicon-32x32.png", assetsFS)
+	r.StaticFileFS("/site.webmanifest", "assets/favicon_io/site.webmanifest", assetsFS)
+}
+
 func attachRoutes(r *gin.Engine) {
+	attachStaticRoutes(r)
+
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "form.gohtml", "123912391293123")
 	})
